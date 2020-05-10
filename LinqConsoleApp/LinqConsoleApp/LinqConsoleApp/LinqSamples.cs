@@ -255,7 +255,7 @@ namespace LinqConsoleApp
         public void Task4()
         {
         var maxObject = Emps.Max(items => items.Salary);
-        var res = Emps.Where(emp=> emp.Salary == maxObject);
+        var res = Emps.Where(emp=> emp.Salary == maxObject).Select(emp => new {emp});
             
         }
 
@@ -264,7 +264,12 @@ namespace LinqConsoleApp
         /// </summary>
         public void Task5()
         {
-        var res = Emps.Where(emp=> emp.Ename == "FirstName" && emp.Job == "EmployeeJob").ToList();
+                var res = from emp in Emps
+                      select new
+                      {
+                          FirstName = emp.Empno,
+                          EmployeeJob = emp.Job
+                      };
             
         }
 
@@ -320,7 +325,7 @@ namespace LinqConsoleApp
             var res = (from emp in Emps
                        where emp.Job == "Frontend programmer"
                        orderby emp.HireDate descending
-                       select emp).First();
+                       select emp).ToList().First();
             
         }
 
@@ -352,7 +357,18 @@ namespace LinqConsoleApp
         {
             var res = from emp in Emps
                       from dept in Depts
-                      select new { emp, dept };
+                      select new 
+                      { 
+                          emp.Empno,
+                          emp.Ename,
+                          emp.Job,
+                          emp.Mgr,
+                          emp.Salary,
+                          emp.HireDate,
+                          dept.Deptno,
+                          dept.Dname,
+                          dept.Loc
+                      };
             
         }
     }
